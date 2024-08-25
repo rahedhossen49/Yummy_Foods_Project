@@ -25,7 +25,7 @@ $banners = mysqli_fetch_all($res, MYSQLI_ASSOC);
           <label for="">
             Banner Title
             <input type="text" name="title" class="form-control my-2"
-              value="<?= ($_SESSION['auth']['title']) ?? null ?>"
+              value=""
               placeholder="Banner Title">
             <span class="text-danger"><?= isset($_SESSION['errors']['title_error']) ?></span>
           </label>
@@ -114,9 +114,6 @@ $banners = mysqli_fetch_all($res, MYSQLI_ASSOC);
 
 
 <!-- Main Body End  -->
-
-
-
 
 
 <?php
