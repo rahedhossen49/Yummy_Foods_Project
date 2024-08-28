@@ -1,10 +1,12 @@
 <?=
 include('./include/DashBoardHeader.php');
 include('../database/env.php');
-$query = "SELECT * FROM foods ORDER BY id DESC";
+$query = "SELECT * FROM categories ORDER BY id DESC";
 $result = mysqli_query($connection, $query);
-$foods = mysqli_fetch_all($result, MYSQLI_ASSOC);
-
+$categories = mysqli_fetch_all($result, MYSQLI_ASSOC);
+$FoodQuery = "SELECT foods.id, foods.category_id, categories.title AS category_title, foods.title, foods.food_img, foods.status FROM foods INNER JOIN categories ON foods.category_id = categories.id ORDER BY foods.id DESC ";
+$FoodResult = mysqli_query($connection,$FoodQuery);
+$Foods = mysqli_fetch_all($FoodResult,1);
 ?>
 
 
@@ -40,7 +42,19 @@ $foods = mysqli_fetch_all($result, MYSQLI_ASSOC);
             <span class="text-danger"><?=$_SESSION['errors']['foodImg_error'] ?? null ?></span>
           </label>
 
+<select name="category" class="form-control">
 
+<?php
+foreach ($categories as $key => $category) {
+?>
+
+        <option value="<?= $category['id']?>"><?= $category['title']?></option>
+
+        <?php
+}
+?>
+
+</select>
         </div>
       </form>
     </div>
@@ -55,27 +69,31 @@ $foods = mysqli_fetch_all($result, MYSQLI_ASSOC);
 
           <tr>
             <th>ID</th>
-            <th>Food Title</th>
-            <th>Food Detail</th>
-            <th>Price</th>
+            <th>Foods</th>
+            <th>Status</th>
+            <th>Category</th>
             <th>Edit</th>
             <th>Delete</th>
           </tr>
-          <?php foreach ($foods as  $key => $food){
+          <?php foreach ($Foods as  $key => $Food){
          ?>
 
           <tr>
             <td><?= ++$key ?></td>
-            <td><?= empty($food['title']) ? '---' : (strlen($food['title']) > 5 ? substr($food['title'], 0, 5) . '....' : $food['title']) ?></td>
-            <td><?= empty($food['detail']) ? '---' : (strlen($food['detail']) > 5 ? substr($food['detail'], 0, 5) . '....' : $food['detail']) ?></td>
-            <td><?= empty($food['price']) ? : $food['price'] ?></td>
+            <td><img width="40px" src="../<?= $Food['food_img']?>" class="me-2" alt="" ><?= $Food['title'] ?></td>
+            <td class="text-center">
+              <a href="../controller/FoodStatus.php?id=<?=$Food['id']?> &status=<?=$Food['status']?>" class="text-warning">
+                <i class="bx bx<?= $Food['status'] == 1 ? 's' : null ?>-star"></i>
+              </a>
+            </td>
+            <td><?= $Food['category_title'] ?></td>
             <td>
-            <a href="./categories.php?id=<?= $food['id'] ?>&title=<?= $food['title'] ?>" class="btn btn-primary btn-delete btn-sm">Edit</a>
+            <a href="?id=<?= $Food['id'] ?>&title=<?= $Food['title'] ?>" class="btn btn-primary btn-delete btn-sm">Edit</a>
 
             </td>
             <td>
 
-            <a href="../controller/CategoryDelete.php?id=<?=$food['id']?>" class="btn btn-danger btn-delete btn-sm">Delete</a>
+            <a href="?id=<?=$Food['id']?>" class="btn btn-danger btn-delete btn-sm">Delete</a>
             </td>
           </tr>
 <?php

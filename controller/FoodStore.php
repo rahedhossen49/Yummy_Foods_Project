@@ -1,5 +1,6 @@
 <?php
 session_start();
+$category = $_REQUEST['category'];
 $title = $_REQUEST['title'] ?? null;
 $detail = $_REQUEST['detail'] ?? null;
 $price = $_REQUEST['price'] ?? null;
@@ -45,7 +46,7 @@ if (count($errors) > 0) {
     $query = "UPDATE `foods` SET `status` = 0";
     mysqli_query($connection, $query);
 
-   $query = "INSERT INTO `foods`(`title`, `details`, `price`, `food_img`) VALUES ('$title','$detail','$price','./Uploads/$fileName')";
+   $query = "INSERT INTO `foods`(`category_id`,`title`, `details`, `price`, `food_img`) VALUES ('$category','$title','$detail','$price','./Uploads/$fileName')";
 
 $res = mysqli_query($connection, $query);
 

@@ -1,5 +1,6 @@
 <?php
 session_start();
+$id = $_REQUEST['id'] ?? null;
 $title = $_REQUEST['title'] ?? null;
 $detail = $_REQUEST['detail'] ?? null;
 $ctaTitle = $_REQUEST['ctaTitle'] ?? null;
@@ -44,7 +45,9 @@ if (count($errors) > 0) {
     $query = "UPDATE `banner` SET `status` = 0";
     mysqli_query($connection, $query);
 
-    $query = "INSERT INTO banner (title, detail,  cta_link, cta_title, video_link, banner_img) VALUES ('$title','$detail','$ctaLink','$ctaTitle','$videoLink','./Uploads/$fileName')";
+    $query = $id ?
+    "UPDATE `banner` SET `title`='$title',`detail`='$detail',`cta_link`='$ctaLink',`cta_title`='$ctaTitle',`video_link`='$videoLink',`banner_img`='$banner', WHERE id = '$id' "
+  :"INSERT INTO banner (title, detail,  cta_link, cta_title, video_link, banner_img) VALUES ('$title','$detail','$ctaLink','$ctaTitle','$videoLink','./Uploads/$fileName')";
 
 
 $res = mysqli_query($connection, $query);

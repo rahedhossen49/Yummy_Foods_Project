@@ -1,8 +1,6 @@
 <?=
 include('./include/DashBoardHeader.php');
-include('../database/env.php'); // Ensure this path is correct
-// Remove include('./controller/todoDelete.php'); from here
-
+include('../database/env.php');
 $query = "SELECT * FROM banner ORDER BY id DESC";
 $res = mysqli_query($connection, $query);
 $banners = mysqli_fetch_all($res, MYSQLI_ASSOC);
@@ -10,7 +8,6 @@ $banners = mysqli_fetch_all($res, MYSQLI_ASSOC);
 ?>
 
 
-<!-- Main Body  -->
 <div class="row">
   <div class="col-xl-4 mb-6 order-0">
     <div class="card">
@@ -25,7 +22,7 @@ $banners = mysqli_fetch_all($res, MYSQLI_ASSOC);
           <label for="">
             Banner Title
             <input type="text" name="title" class="form-control my-2"
-              value=""
+            value="<?= $_REQUEST['title'] ?? null ?>"
               placeholder="Banner Title">
             <span class="text-danger"><?= isset($_SESSION['errors']['title_error']) ?></span>
           </label>
@@ -33,12 +30,12 @@ $banners = mysqli_fetch_all($res, MYSQLI_ASSOC);
 
           <label for="">
             Banner Detail
-            <textarea name="detail" class="form-control my-2" placeholder="Banner Detail"></textarea>
+            <textarea name="detail" value="<?= $_REQUEST['detail'] ?? null ?>" class="form-control my-2" placeholder="Banner Detail"></textarea>
             <span class="text-danger"><?= $_SESSION['errors']['detail_error'] ?? '' ?></span>
           </label>
           <label for="">
             Cta Title
-            <input type="" name="ctaTitle" class="form-control my-2" placeholder="Cta Title">
+            <input type="" name="ctaTitle" value="<?= $_REQUEST['ctaTitile'] ?? null ?>" class="form-control my-2" placeholder="Cta Title">
             <span class="text-danger"><?= $_SESSION['errors']['cta_error'] ?? '' ?></span>
 
           </label>
@@ -76,6 +73,7 @@ $banners = mysqli_fetch_all($res, MYSQLI_ASSOC);
             <th>Cta Link</th>
             <th>Video Link</th>
             <th>Banner image</th>
+            <th>Edit</th>
             <th>Delete</th>
           </tr>
           <?php foreach ($banners as  $key => $banner){
@@ -89,7 +87,10 @@ $banners = mysqli_fetch_all($res, MYSQLI_ASSOC);
             <td><?= empty($banner['cta_link']) ? '---' : (strlen($banner['cta_link']) > 5 ? substr($banner['cta_link'], 0, 5) . '....' : $banner['cta_link']) ?></td>
             <td><?= empty($banner['video_link']) ? '---' : (strlen($banner['video_link']) > 13 ? substr($banner['video_link'], 0, 10) . '....' : $banner['video_link']) ?></td>
             <td><?= empty($banner['banner_img']) ? '---' : (strlen($banner['banner_img']) > 5 ? substr($banner['banner_img'], 0, 5) . '....' : $banner['banner_img']) ?></td>
+            <td>
 
+            <!-- <a href="./banner.php?id=<?= urlencode($categorie['id']) ?>&title=<?= urlencode($banner['title']) ?>&detail=<?= urlencode($banner['detail']) ?>&cta_link=<?= urlencode($banner['cta_link']) ?>&cta_title=<?= urlencode($banner['ctaTitle']) ?>" class="btn btn-primary btn-delete btn-sm">Edit</a> -->
+            </td>
             <td>
               <a href="../controller/BannerDelete.php?id=<?= $banner['id'] ?>" class="btn btn-danger btn-delete btn-sm">Delete</a>
             </td>
